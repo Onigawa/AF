@@ -7,84 +7,8 @@ require(stringr)
 require(XML)
 require(mailR)
 
-printGantt<-function(calendar){
-  
-  # Convert to dates
-  calendar$start<-as.Date(calendar$start,format = "%Y-%m-%d")
-  calendar$end<-as.Date(calendar$end,format = "%Y-%m-%d")
-  
-  # Initialize empty plot
-  p <- plot_ly()
-  
-  # Each task is a separate trace
-  # Each trace is essentially a thick line plot
-  # x-axis ticks are dates and handled automatically
-  
-  for(i in 1:(nrow(calendar) -1)){
-    calendar$duration<-calendar$end[i]-calendar$start[i]
-    p <- suppressWarnings(add_trace(p,
-                                    x = c(calendar$start[i], calendar$end[i] ),  # x0, x1
-                                    y = c(i, i),  # y0, y1
-                                    mode = "lines",
-                                    line = list( width = 20),
-                                    showlegend = F,
-                                    hoverinfo = "text",
-                                    
-                                    # Create custom hover text
-                                    text = paste("Task: ", calendar$name[i], "<br>",
-                                                 "Duration: ", calendar$duration[i], "days<br>",
-                                                 "Resource: ", calendar$participantsID[i]),
-                                    
-                                    
-                                    evaluate = T  # needed to avoid lazy loading
-    ))
-  }
-  suppressWarnings(p)
-}
-
-PRJmail<-function(to,subject,msg){
-    if(is.na(to)||is.null(subject)||is.null(msg)){
-      warning("Empty Fields")
-    }else{
-      sender <- "postmasterprj@gmail.com"
-        send.mail(from = sender,
-                               to = to,
-                               subject = subject,
-                               body = msg,
-                               smtp = list(host.name = "smtp.gmail.com", port = 465, 
-                                                                    user.name = "postmasterprj@gmail.com",            
-                                                                    passwd = "P.R.J.123", ssl = TRUE),
-                               authenticate = TRUE,
-                               send = TRUE)}
-}
-
-randString <- function(n = 5000) {
-  a <- do.call(paste0, replicate(5, sample(LETTERS, n, TRUE), FALSE))
-  paste0(a, sprintf("%04d", sample(9999, n, TRUE)), sample(LETTERS, n, TRUE))
-}
-
-stage_rss<-function(link="http://recrutement.airfrance.com/handlers/offerRss.ashx?LCID=1036&Rss_Contract=3442"){
-  doc<-xmlParse(link)
-  
-  src<-xpathApply(xmlRoot(doc), "//item")
-  
-  for (i in 1:length(src)) {
-    if (i==1) {
-      foo<-xmlSApply(src[[i]], xmlValue)
-      DATA<-data.frame(t(foo), stringsAsFactors=FALSE)
-    }
-    else {
-      foo<-xmlSApply(src[[i]], xmlValue)
-      tmp<-data.frame(t(foo), stringsAsFactors=FALSE)
-      DATA<-rbind(DATA, tmp)
-    }
-    
-  }
-  DATA[,1]<-sprintf(paste('<a href="',DATA[,1],'" target="_blank" class="btn btn-primary">Lien</a>'))
-  colnames(DATA)<-c("Lien","Categorie","Cat1","Localisation","Intitule","Description","Date de Publication")
-  return(DATA)
-}
-
+source('utils.R', local = TRUE)
+source('boxes.R', local = TRUE)
 
 
 
@@ -99,142 +23,52 @@ ui <- dashboardPage(skin = "red",
 login_details <- data.frame(user = c("admin@airfrance.fr", "student@ecole.fr"),
                             pswd = c("admin", "student"))
 
-login <- box(
-  title = "Authentification",
-  textInput("userName", "Email (admin@airfrance.fr OU student@ecole.fr)"),
-  passwordInput("passwd", "Password (admin ou student)"),
-  br(),
-  actionButton("Login", "Se connecter")
-)
 
-login2 <- box(
-  title = "Authentification",
-  textInput("userName2", "Email (admin@airfrance.fr OU student@ecole.fr)"),
-  passwordInput("passwd2", "Password (admin ou student)"),
-  br(),
-  actionButton("Login2", "Se connecter")
-)
-
-
-newprofile <- box(solidHeader = TRUE, status = "danger",
-  title = "Ajouter une personne",
-  textInput("add_Projet_Personne", "Identifiants des Projets"),
-  textInput("add_Nom", "Nom"),
-  textInput("add_Prenom", "Prenom"),
-  textInput("add_Email", "Email"),
-  textInput("add_Service", "Service"),
-  textInput("add_Ecole", "Ecole"),
-  
-  #passwordInput("passwd", "Password (admin ou student)"),
-  br(),
-  actionButton("add_Personne", "Sauvegarder")
-)
-
-newevent <- box(solidHeader = TRUE, status = "danger",
-  title = "Ajouter une tache",footer = "Format de date: 2017-11-07 09:42:25",
-  textInput("add_Event_Start", "Debut de la tache"),
-  textInput("add_Event_End", "Fin de la tache"),
-  textInput("add_Event_Nom", "Nom de la tache"),
-  textInput("add_Event_Location", "Localisation"),
-  textInput("add_Event_Participants", "Identifiants des participants"),
-  
-  
-  #passwordInput("passwd", "Password (admin ou student)"),
-  br(),
-  actionButton("add_Event", "Sauvegarder")
-)
-
-newproject <- box(solidHeader = TRUE, status = "danger",
-  title = "Ajouter un Projet",
-  textInput("add_Project_Title", "Titre du projet"),
-  textInput("add_Project_Type", "Type de Projet"),
-  textInput("add_Project_School", "Nom de l'Ecole"),
-  textInput("add_Project_Location", "Localisation"),
-  textInput("add_Project_Participants", "Identifiants des participants"),
-  
-  
-  #passwordInput("passwd", "Password (admin ou student)"),
-  br(),
-  actionButton("add_Project", "Sauvegarder")
-)
-
-changeprofile <- box(solidHeader = TRUE, status = "danger",
-                  title = "Modifier une personne",
-                  conditionalPanel(condition = "connection.session.role=='Administrateur'", textInput("change_Email", "Email du profil a modifer")),
-                  textInput("change_Projet_Personne", "Identifiants des Projets"),
-                  textInput("change_Nom", "Nom"),
-                  textInput("change_Prenom", "Prenom"),
-                  textInput("change_Service", "Service"),
-                  textInput("change_Ecole", "Ecole"),
-                  
-                  #passwordInput("passwd", "Password (admin ou student)"),
-                  br(),
-                  actionButton("change_Personne", "Sauvegarder")
-)
-
-changeproject <- box(solidHeader = TRUE, status = "danger",
-                  title = "Modifier un Projet",
-                  textInput("change_Project_Title", "Titre du projet a modifier"),
-                  textInput("change_Project_Type", "Type de Projet"),
-                  textInput("change_Project_School", "Nom de l'Ecole"),
-                  textInput("change_Project_Location", "Localisation"),
-                  textInput("change_Project_Participants", "Identifiants des participants"),
-                  
-                  
-                  #passwordInput("passwd", "Password (admin ou student)"),
-                  br(),
-                  actionButton("change_Project", "Sauvegarder")
-)
-
-changeevent <- box(solidHeader = TRUE, status = "danger",
-                title = "Modifier une tache",footer = "Format de date: 2017-11-07 09:42:25",
-                textInput("change_Event_Start", "Debut de la tache"),
-                textInput("change_Event_End", "Fin de la tache"),
-                textInput("change_Event_Nom", "Nom de la tache"),
-                textInput("change_Event_Location", "Localisation"),
-                textInput("change_Event_Participants", "Identifiants des participants"),
-                
-                
-                #passwordInput("passwd", "Password (admin ou student)"),
-                br(),
-                actionButton("change_Event", "Sauvegarder")
-)
 
 server <- function(input, output, session) {
 
-  
-  # #AUTHENTICATION --------------------------------
-  # login.page = paste(
-  #   isolate(session$clientData$url_protocol),
-  #   "//",
-  #   isolate(session$clientData$url_hostname),
-  #   ":",
-  #   isolate(session$clientData$url_port),
-  #   sep = ""
-  # )
-  
+
   USER <- reactiveValues(Logged = F, Guard = 0)
-  connection<-reactiveValues(session= "")
+  connection<-reactiveValues(session= "",role="")
   
+  #Login 
   observeEvent(input$Login2,{
     df<-read.csv2(file = "person.csv",stringsAsFactors = FALSE)
     if((df[df$mail==input$userName2,]$password)==input$passwd2){
     USER$Logged<-TRUE
     connection$session<-df[df$mail==input$userName2,]
+    connection$role<-df[df$mail==input$userName2,"role"]
       }
     
   })
   
+  #Side menu
   output$sidebarpanel <- renderUI({
     if (USER$Logged == TRUE) {
-      sidebarMenu(
-        menuItem("Dashboard", tabName = "dashboard", icon = icon("dashboard")),
-        menuItem("Profil", tabName = "profile", icon = icon("user")),
-        menuItem("Archives", tabName = "archive", icon = icon("archive")),
-        menuItem("Stages", tabName = "internship", icon = icon("thumbs-up")),
-        menuItem("Mail", tabName = "mail", icon = icon("envelope")),
-        conditionalPanel(condition =  "input.userName2=='admin@airfrance.fr'" ,menuItem("Administrateur", tabName = "ajout", icon = icon("plane")))
+      
+      switch(connection$role,
+             "Administrateur"={
+               sidebarMenu(
+                 menuItem("Dashboard", tabName = "dashboard", icon = icon("dashboard")),
+                 menuItem("Profil", tabName = "profile", icon = icon("user")),
+                 menuItem("Archives", tabName = "archive", icon = icon("archive")),
+                 menuItem("Stages", tabName = "internship", icon = icon("thumbs-up")),
+                 menuItem("Mail", tabName = "mail", icon = icon("envelope")),
+                 menuItem("Administrateur", tabName = "ajout", icon = icon("plane"))
+               )},
+               "Etudiant"={
+                 sidebarMenu(
+                   menuItem("Dashboard", tabName = "dashboard", icon = icon("dashboard")),
+                   menuItem("Profil", tabName = "profile", icon = icon("user")),
+                   menuItem("Archives", tabName = "archive", icon = icon("archive")),
+                   menuItem("Stages", tabName = "internship", icon = icon("thumbs-up")),
+                   menuItem("Mail", tabName = "mail", icon = icon("envelope"))
+                 )
+               }
+             
+        
       )
+
     }
   })
   
@@ -272,7 +106,7 @@ server <- function(input, output, session) {
                   box(
                     title = "Contacts", width = 6, solidHeader = TRUE, status = "danger",
                     DT:: dataTableOutput('table_person'),
-                    conditionalPanel(condition =  "input.userName=='admin@airfrance.fr'",
+                    conditionalPanel(condition =  "output.role=='Administrateur'",
                                      actionButton("box_add_person", "Ajouter une personne")) 
                   )
                 )
@@ -536,6 +370,11 @@ changeprofile
   Stages <- stage_rss()
   output$table_stage <- DT::renderDataTable(Stages[,-c(3,6)], escape = FALSE, rownames = FALSE)
 
+  output$role <- reactive({
+    connection$role
+  })
+  
+  outputOptions(output, "role", suspendWhenHidden = FALSE)
   }
 
 
