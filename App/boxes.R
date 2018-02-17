@@ -1,15 +1,15 @@
-login <- box(
-  title = "Authentification",
-  textInput("userName", "Email (admin@airfrance.fr OU student@ecole.fr)"),
-  passwordInput("passwd", "Password (admin ou student)"),
-  br(),
-  actionButton("Login", "Se connecter")
-)
+# login <- box(
+#   title = "Authentification",
+#   textInput("userName", "Email (admin@airfrance.fr OU student@ecole.fr)"),
+#   passwordInput("passwd", "Password (admin ou student)"),
+#   br(),
+#   actionButton("Login", "Se connecter")
+# )
 
 login2 <- box(
   title = "Authentification",
-  textInput("userName2", "Email (admin@airfrance.fr OU student@ecole.fr)"),
-  passwordInput("passwd2", "Password (admin ou student)"),
+  textInput("userName2", "Email (admin@airfrance.fr OU student@ecole.fr)",value = "student@ecole.fr"),
+  passwordInput("passwd2", "Password (admin ou student)",value = "student"),
   br(),
   actionButton("Login2", "Se connecter")
 )

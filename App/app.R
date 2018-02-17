@@ -12,24 +12,33 @@ source('boxes.R', local = TRUE)
 
 
 
+
 ui <- dashboardPage(skin = "red",
                     
-                    dashboardHeader(title = "P.R.J."),
+                    dashboardHeader(title = "P.R.J.",tags$li(class = "dropdown", actionButton("home", "Home"))),
                     dashboardSidebar(uiOutput("sidebarpanel")),
                     dashboardBody(uiOutput("body"))
 )
 
-#LOGIN INFOS
-login_details <- data.frame(user = c("admin@airfrance.fr", "student@ecole.fr"),
-                            pswd = c("admin", "student"))
-
-
 
 server <- function(input, output, session) {
-
-
+  
   USER <- reactiveValues(Logged = F, Guard = 0)
   connection<-reactiveValues(session= "",role="")
+  
+  #all renders
+  source('renders.R', local = TRUE)
+  output$Projet_Titre<-Projet_Titre
+  output$sidebarpanel<-sidebarpanel
+  output$Gallerie<-Gallerie
+  output$Projet_Resume<-Projet_Resume
+  output$table_stage<-table_stage
+  output$table_archive<-table_archive
+  output$table_projects<-table_projects
+  output$table_person<-table_person
+  
+
+  
   
   #Login 
   observeEvent(input$Login2,{
@@ -38,40 +47,14 @@ server <- function(input, output, session) {
     USER$Logged<-TRUE
     connection$session<-df[df$mail==input$userName2,]
     connection$role<-df[df$mail==input$userName2,"role"]
+    df<-read.csv2("project_person.csv",stringsAsFactors = FALSE)
+    connection$projects<-df[df$person==connection$session$id,]
+    
       }
     
   })
   
-  #Side menu
-  output$sidebarpanel <- renderUI({
-    if (USER$Logged == TRUE) {
-      
-      switch(connection$role,
-             "Administrateur"={
-               sidebarMenu(
-                 menuItem("Dashboard", tabName = "dashboard", icon = icon("dashboard")),
-                 menuItem("Profil", tabName = "profile", icon = icon("user")),
-                 menuItem("Archives", tabName = "archive", icon = icon("archive")),
-                 menuItem("Stages", tabName = "internship", icon = icon("thumbs-up")),
-                 menuItem("Mail", tabName = "mail", icon = icon("envelope")),
-                 menuItem("Administrateur", tabName = "ajout", icon = icon("plane"))
-               )},
-               "Etudiant"={
-                 sidebarMenu(
-                   menuItem("Dashboard", tabName = "dashboard", icon = icon("dashboard")),
-                   menuItem("Profil", tabName = "profile", icon = icon("user")),
-                   menuItem("Archives", tabName = "archive", icon = icon("archive")),
-                   menuItem("Stages", tabName = "internship", icon = icon("thumbs-up")),
-                   menuItem("Mail", tabName = "mail", icon = icon("envelope"))
-                 )
-               }
-             
-        
-      )
 
-    }
-  })
-  
   output$body <- renderUI({
     if (USER$Logged == TRUE) {
       tags$head(
@@ -171,24 +154,9 @@ changeprofile
   
   #DASHBOARD VARIABLES
   
-  output$Projet_Titre <- renderText({"TITRE DU PROJET"})
-  output$Projet_Resume <- renderText({"
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-    magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."})
+
   
-  output$Gallerie <- renderUI({
-    tagList(
-      img(src = "http://via.placeholder.com/300", height = 100, width = 100),
-      img(src = "http://via.placeholder.com/300", height = 100, width = 100),
-      img(src = "http://via.placeholder.com/300", height = 100, width = 100),
-      img(src = "http://via.placeholder.com/300", height = 100, width = 100),
-      img(src = "http://via.placeholder.com/300", height = 100, width = 100),
-      img(src = "http://via.placeholder.com/300", height = 100, width = 100),
-      img(src = "http://via.placeholder.com/300", height = 100, width = 100)
-    )
-  })
+
   
   #Ajout de personnes
  observeEvent(eventExpr = input$add_Personne,handlerExpr =  {
@@ -202,7 +170,7 @@ changeprofile
     
     if(!(""%in%line[1,])){
       
-      write.table(x = line,file = "person.csv",append = TRUE,sep = ";",col.names = FALSE,quote = FALSE)
+      write.table(x = line,file = "person.csv",append = TRUE,sep = ";",col.names = FALSE,quote = FALSE,row.names = FALSE)
     }else{
         warning("Empty Fields")
       }
@@ -219,7 +187,7 @@ changeprofile
    
    if(!(""%in%line[1,])){
      
-     write.table(x = line,file = "calendar.csv",append = TRUE,sep = ";",col.names = FALSE,quote = FALSE)
+     write.table(x = line,file = "calendar.csv",append = TRUE,sep = ";",col.names = FALSE,quote = FALSE,row.names = FALSE)
    }else{
      warning("Empty Fields")
    }
@@ -236,7 +204,7 @@ changeprofile
    
    if(!(""%in%line[1,])){
      
-     write.table(x = line,file = "projects.csv",append = TRUE,sep = ";",col.names = FALSE,quote = FALSE)
+     write.table(x = line,file = "projects.csv",append = TRUE,sep = ";",col.names = FALSE,quote = FALSE,row.names = FALSE)
    }else{
      warning("Empty Fields")
    }
@@ -348,12 +316,7 @@ changeprofile
   
 
   
-  #LOADING CSV
-  data_person <- read.table(file = "person.csv", header = TRUE, stringsAsFactors = FALSE, sep = ";")[,-1]
-  output$table_person <- DT::renderDataTable(data_person, rownames = FALSE)
-  
-  data_project <- read.table(file = "projects.csv", header = TRUE, stringsAsFactors = FALSE, sep = ";")[,-1]
-  output$table_projects <- DT::renderDataTable(data_project, rownames = FALSE)
+
 
   #LINKS DATATABLE
   Projets <- c("PRJ2017", "RX-745")
@@ -365,10 +328,7 @@ changeprofile
     PRJmail(to = input$mail_to,msg = input$mail_text,subject = input$mail_subject)
   })
   
-  output$table_archive <- DT::renderDataTable(Lien, rownames = FALSE)
-  
-  Stages <- stage_rss()
-  output$table_stage <- DT::renderDataTable(Stages[,-c(3,6)], escape = FALSE, rownames = FALSE)
+
 
   output$role <- reactive({
     connection$role
