@@ -9,16 +9,25 @@ require(mailR)
 
 source('utils.R', local = TRUE)
 source('boxes.R', local = TRUE)
-
+source('body.R', local = TRUE)
 
 
 
 ui <- dashboardPage(skin = "red",
                     
-                    dashboardHeader(title = "P.R.J.",tags$li(class = "dropdown", actionButton("DEBUG", "DEBUG"))),
+                    dashboardHeader(title = "P.R.J.",tags$li(class = "dropdown", 
+                                                             actionButton("DEBUG", "DEBUG")
+                                                             )),
                     dashboardSidebar(uiOutput("sidebarpanel")),
-                    dashboardBody(
-                      uiOutput("body")
+                    dashboardBody(useShinyjs(),
+                      tags$head(
+                        tags$link(rel = "stylesheet", type = "text/css", href = "theme.css")
+                      ),
+                      p(id = "logbox", login2),
+                      #conditionalPanel(condition = "output.logged==FALSE && input.Login2==0",login2),
+                      conditionalPanel(condition = "output.logged==TRUE",bodylogged)
+                      
+                      #uiOutput("body")
                       )
 )
 
@@ -62,9 +71,9 @@ server <- function(input, output, session) {
     
   })
   
-  source('body.R', local = TRUE)
+  #source('body.R', local = TRUE)
 
-    output$body <-  test
+    #output$body <-  body
  
   
   #--------------------------------------------
@@ -256,8 +265,16 @@ server <- function(input, output, session) {
   output$logged <- reactive({
     USER$Logged
   })
-  outputOptions(output, "logged", suspendWhenHidden = FALSE)
+  outputOptions(output, "logged")
   outputOptions(output, "role", suspendWhenHidden = FALSE)
+  
+  output$hide_log<- eventReactive(input$Login2, TRUE, ignoreInit = TRUE)
+  outputOptions(output, "hide_log", suspendWhenHidden = FALSE)
+  
+  observe({
+    toggle(id = "logbox", condition = (input$Login2==0))
+  })
+  
   }
 
 
