@@ -69,9 +69,12 @@ server <- function(input, output, session) {
       tabItems(
         #DASHBOARD TAB CONTENT
         tabItem(tabName = "dashboard",
+                
                 fluidRow(
-                  column(width = 12, offset = 5, h1("Bienvenue"), br(), br()
-                  )
+                  column(width = 6, offset = 5, h1("Bienvenue"), br(), br()
+                  ),
+                  column(width = 6,offset = 5,
+                         selectInput(inputId = "current_project",label = "Votre Projet",choices = data_project[data_project$id==connection$projects$project,"title"]))
                 ),
                 fluidRow(
                   #Projets
