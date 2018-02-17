@@ -15,7 +15,7 @@ source('boxes.R', local = TRUE)
 
 ui <- dashboardPage(skin = "red",
                     
-                    dashboardHeader(title = "P.R.J.",tags$li(class = "dropdown", actionButton("home", "Home"))),
+                    dashboardHeader(title = "P.R.J.",tags$li(class = "dropdown", actionButton("DEBUG", "DEBUG"))),
                     dashboardSidebar(uiOutput("sidebarpanel")),
                     dashboardBody(uiOutput("body"))
 )
@@ -37,6 +37,12 @@ server <- function(input, output, session) {
   output$table_projects<-table_projects
   output$table_person<-table_person
   
+  observeEvent(input$DEBUG,
+               {
+                 #DEBUG
+                 dummy<-0
+                 dummy<-1
+               })
 
   
   
