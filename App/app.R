@@ -91,6 +91,16 @@ server <- function(input, output, session) {
     updateSelectInput(session, "current_project",
                       choices = data_project[data_project$id==connection$projects$project,"title"]
     )})
+  observe({
+    input$current_project
+    df<-read.csv2(file = "projects.csv",stringsAsFactors = FALSE)
+    project_id<-reactive( df[df$title==input$current_project,"id"])
+    #data_person <- read.table(file = "person.csv", header = TRUE, stringsAsFactors = FALSE, sep = ";")[,-1]
+    data_project <- read.table(file = "projects.csv", header = TRUE, stringsAsFactors = FALSE, sep = ";")[,-1]
+    data_project<-data_project[data_project$title==input$current_project,]
+    
+  })
+  
   }
 
 

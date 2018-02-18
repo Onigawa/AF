@@ -3,7 +3,9 @@ data_person <- read.table(file = "person.csv", header = TRUE, stringsAsFactors =
 table_person <- DT::renderDataTable(data_person, rownames = FALSE)
 
 data_project <- read.table(file = "projects.csv", header = TRUE, stringsAsFactors = FALSE, sep = ";")[,-1]
-table_projects <-  DT::renderDataTable( connection$projects, rownames = FALSE) #DT::renderDataTable(data_project, rownames = FALSE)
+
+
+table_projects <-  DT::renderDataTable( data_project[data_project$title==input$current_project,], rownames = FALSE) #DT::renderDataTable(data_project, rownames = FALSE)
 
 gantt<-renderPlotly(printGantt(read.csv2(file="./calendar.csv")))
 #LINKS DATATABLE
