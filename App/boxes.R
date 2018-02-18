@@ -6,7 +6,7 @@
 #   actionButton("Login", "Se connecter")
 # )
 
-login2 <- box(
+login2 <- fluidPage(
   title = "Authentification",
   textInput("userName2", "Email (admin@airfrance.fr OU student@ecole.fr)",value = "student@ecole.fr"),
   passwordInput("passwd2", "Password (admin ou student)",value = "student"),

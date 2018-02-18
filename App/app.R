@@ -233,7 +233,7 @@ server <- function(input, output, session) {
  observeEvent(input$box_add_person, {
    showModal(modalDialog(
      newprofile,
-     easyClose = TRUE,size = 
+     easyClose = TRUE
    ))
  }) 
  
@@ -280,13 +280,7 @@ server <- function(input, output, session) {
   output$hide_log<- eventReactive(input$Login2, TRUE, ignoreInit = TRUE)
   outputOptions(output, "hide_log", suspendWhenHidden = FALSE)
   
-  # observeEvent(input$login, {
-  #   showModal(modalDialog(
-  #     login2,
-  #     easyClose = TRUE
-  #   ))
-  # })
-  
+
   logged_in <- reactiveVal(FALSE)
   
   # switch value of logged_in variable to TRUE after login succeeded
@@ -299,7 +293,8 @@ server <- function(input, output, session) {
     }else{
       showModal(modalDialog(
         login2,
-        easyClose = TRUE
+        easyClose = TRUE,
+        footer = NULL
       ))
     }  
 
