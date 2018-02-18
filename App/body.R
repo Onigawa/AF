@@ -1,5 +1,4 @@
 
-
 body<-renderUI({
   if (USER$Logged == TRUE) {
     bodylogged
@@ -16,7 +15,7 @@ bodylogged<-tabItems(
             column(width = 6, offset = 5, h1("Bienvenue"), br(), br()
             ),
             column(width = 6,offset = 5,
-                   selectInput(inputId = "current_project",label = "Votre Projet",choices =c(1,2,3) ))#data_project[data_project$id==connection$projects$project,"title"]
+                   selectInput(inputId = "current_project",label = "Votre Projet",choices =NULL ))#
           ),
           fluidRow(
             #Projets
