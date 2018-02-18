@@ -25,11 +25,7 @@ ui <- dashboardPage(skin = "red",
                       tags$head(
                         tags$link(rel = "stylesheet", type = "text/css", href = "theme.css")
                       ),
-                      #p(id = "logbox", login2),
-                      #conditionalPanel(condition = "output.logged==FALSE && input.Login2==0",login2),
                       conditionalPanel(condition = "output.logged==TRUE",bodylogged)
-                      
-                      #uiOutput("body")
                       )
 )
 
@@ -49,6 +45,7 @@ server <- function(input, output, session) {
   output$table_archive<-table_archive
   output$table_projects<-table_projects
   output$table_person<-table_person
+  output$gantt<-gantt
   
   observeEvent(input$DEBUG,
                {

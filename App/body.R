@@ -25,7 +25,7 @@ bodylogged<-tabItems(
             ),
             #Workflow
             box(title = "WorkFlow", width = 6, solidHeader = TRUE, status = "danger",
-                renderPlotly(printGantt(read.csv2(file="./calendar.csv"))),
+                plotlyOutput(outputId = "gantt"),
                 actionButton("box_add_event", "Ajouter une tache")
             )
           ),

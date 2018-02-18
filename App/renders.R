@@ -5,7 +5,7 @@ table_person <- DT::renderDataTable(data_person, rownames = FALSE)
 data_project <- read.table(file = "projects.csv", header = TRUE, stringsAsFactors = FALSE, sep = ";")[,-1]
 table_projects <-  DT::renderDataTable( connection$projects, rownames = FALSE) #DT::renderDataTable(data_project, rownames = FALSE)
 
-
+gantt<-renderPlotly(printGantt(read.csv2(file="./calendar.csv")))
 #LINKS DATATABLE
 Projets <- c("PRJ2017", "RX-745")
 LienDrive <- c("https://drive.google.com/drive/folders/0B4PquDdceptmdlJCc3Z4ZUt5MEk")
