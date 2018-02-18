@@ -16,14 +16,16 @@ source('body.R', local = TRUE)
 ui <- dashboardPage(skin = "red",
                     
                     dashboardHeader(title = "P.R.J.",tags$li(class = "dropdown", 
-                                                             actionButton("DEBUG", "DEBUG")
+                                                             #actionButton("DEBUG", "DEBUG"),
+                                                             tags$li(class = "dropdown", textOutput("logged_user"), style = "padding-top: 15px; padding-bottom: 15px; color: #fff;"),
+                                                             tags$li(class = "dropdown", actionLink("header_login", textOutput("logintext")))
                                                              )),
                     dashboardSidebar(uiOutput("sidebarpanel")),
-                    dashboardBody(useShinyjs(),
+                    dashboardBody(
                       tags$head(
                         tags$link(rel = "stylesheet", type = "text/css", href = "theme.css")
                       ),
-                      p(id = "logbox", login2),
+                      #p(id = "logbox", login2),
                       #conditionalPanel(condition = "output.logged==FALSE && input.Login2==0",login2),
                       conditionalPanel(condition = "output.logged==TRUE",bodylogged)
                       
@@ -66,7 +68,7 @@ server <- function(input, output, session) {
     connection$role<-df[df$mail==input$userName2,"role"]
     df<-read.csv2("project_person.csv",stringsAsFactors = FALSE)
     connection$projects<-df[df$person==connection$session$id,]
-    
+    removeModal()
       }
     
   })
@@ -221,6 +223,13 @@ server <- function(input, output, session) {
    ))
  }) 
  
+ observeEvent(input$box_add_event, {
+   showModal(modalDialog(
+     newevent,
+     easyClose = TRUE
+   ))
+ }) 
+ 
  observeEvent(input$box_add_person, {
    showModal(modalDialog(
      newprofile,
@@ -271,9 +280,43 @@ server <- function(input, output, session) {
   output$hide_log<- eventReactive(input$Login2, TRUE, ignoreInit = TRUE)
   outputOptions(output, "hide_log", suspendWhenHidden = FALSE)
   
-  observe({
-    toggle(id = "logbox", condition = (input$Login2==0))
+  # observeEvent(input$login, {
+  #   showModal(modalDialog(
+  #     login2,
+  #     easyClose = TRUE
+  #   ))
+  # })
+  
+  logged_in <- reactiveVal(FALSE)
+  
+  # switch value of logged_in variable to TRUE after login succeeded
+  # observeEvent(input$header_login, {
+  #   logged_in(ifelse(logged_in(), FALSE, TRUE))
+  # })
+  observeEvent(input$header_login, {
+    if(USER$Logged){
+      session$reload()
+    }else{
+      showModal(modalDialog(
+        login2,
+        easyClose = TRUE
+      ))
+    }  
+
   })
+  
+  # show "Login" or "Logout" depending on whether logged out or in
+  output$logintext <- renderText({
+    if(USER$Logged) return("Logout here.")
+    return("Login here")
+  })
+  
+  # show text of logged in user
+  output$logged_user <- renderText({
+    if(logged_in()) return("User 1 is logged in.")
+    return("")
+  })
+
   
   }
 
