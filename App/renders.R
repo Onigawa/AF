@@ -3,6 +3,8 @@ data_person <- read.table(file = "person.csv", header = TRUE, stringsAsFactors =
 project_person<-read.table(file = "project_person.csv", header = TRUE, stringsAsFactors = FALSE, sep = ";")
 project_person.id<-reactive(project_person[project_person$project==project.id(),])
 table_person <- DT::renderDataTable(data_person[data_person$id %in% project_person.id()$person,], rownames = FALSE)
+#connection.email<-renderText(connection$session$mail)
+
 
 data_project <- read.table(file = "projects.csv", header = TRUE, stringsAsFactors = FALSE, sep = ";")
 
@@ -75,4 +77,13 @@ Projet_Resume <- renderText({"
     }
   })
 
+  changeprofile<-renderUI({
+    if (USER$Logged == TRUE) {
+    switch(connection$role,
+           "Administrateur"={changeprofileadmin},
+           changeprofilebase
+           
+    )
+    }
+  })
 

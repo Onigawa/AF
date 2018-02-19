@@ -51,7 +51,7 @@ bodylogged<-tabItems(
           fluidPage(
             column(width = 12,
                    #Projets
-                   changeprofile
+                   uiOutput("changeprofile") 
             )
           )
   ),
@@ -69,7 +69,7 @@ bodylogged<-tabItems(
           
           fluidPage(       
             newproject,         
-            changeprofile,
+            changeprofileadmin,
             changeevent,
             changeproject
           )

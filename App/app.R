@@ -36,6 +36,7 @@ server <- function(input, output, session) {
   USER <- reactiveValues(Logged = F, Guard = 0)
   connection<-reactiveValues(session= "",role="")
   
+  
   #all renders
   source('renders.R', local = TRUE)
   output$Projet_Titre<-Projet_Titre
@@ -47,6 +48,8 @@ server <- function(input, output, session) {
   output$table_projects<-table_projects
   output$table_person<-table_person
   output$gantt<-gantt
+  output$changeprofile<-changeprofile
+  
   
   
   observeEvent(input$DEBUG,
@@ -95,12 +98,16 @@ server <- function(input, output, session) {
   observe({
     updateSelectInput(session, "current_project",
                       choices = data_project[data_project$id==connection$projects$project,"title"]
-    )})
+    )
+    })
+  observe({
+    if(connection$role=="Administrateur") updateTextInput(session,"change_Email",value = connection$session$mail)
+    })
+  
   observe({
     input$current_project
     df<-read.csv2(file = "projects.csv",stringsAsFactors = FALSE)
     project_id<-reactive( df[df$title==input$current_project,"id"])
-    #data_person <- read.table(file = "person.csv", header = TRUE, stringsAsFactors = FALSE, sep = ";")[,-1]
     data_project <- read.table(file = "projects.csv", header = TRUE, stringsAsFactors = FALSE, sep = ";")[,-1]
     data_project<-data_project[data_project$title==input$current_project,]
     

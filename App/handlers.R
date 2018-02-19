@@ -69,13 +69,25 @@ observeEvent(eventExpr = input$add_Project,handlerExpr =  {
 
 #Modif person
 observeEvent(eventExpr = input$change_Personne,handlerExpr =  {
-  line<-data.frame(id=max(read.csv2("person.csv")$id)+1,
-                   name=input$change_Nom,
-                   surname=input$change_Prenom,
-                   mail=input$change_Email,
-                   service=input$change_Service,
-                   school=input$change_Ecole,
-                   password="123",stringsAsFactors = FALSE)
+  
+  if(connection$role=="Adminstrateur"){
+    line<-data.frame(id=max(read.csv2("person.csv")$id)+1,
+                     name=input$change_Nom,
+                     surname=input$change_Prenom,
+                     mail=input$change_Email,
+                     service=input$change_Service,
+                     school=input$change_Ecole,
+                     password="123",stringsAsFactors = FALSE)
+  }else{
+    line<-data.frame(id=max(read.csv2("person.csv")$id)+1,
+                     name=input$change_Nom,
+                     surname=input$change_Prenom,
+                     mail=connection$session$mail,
+                     service=input$change_Service,
+                     school=input$change_Ecole,
+                     password="123",stringsAsFactors = FALSE)
+  }
+
   
   df<-read.csv2("person.csv",stringsAsFactors = FALSE)
   
