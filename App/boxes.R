@@ -23,7 +23,7 @@ newprofile <- box(solidHeader = TRUE, status = "danger",
                   textInput("add_Email", "Email"),
                   textInput("add_Service", "Service"),
                   textInput("add_Ecole", "Ecole"),
-                  
+                  selectInput("add_role","Niveau d'autorisation",choices = c("Administrateur","Etudiant")),
                   #passwordInput("passwd", "Password (admin ou student)"),
                   br(),
                   actionButton("add_Personne", "Sauvegarder")

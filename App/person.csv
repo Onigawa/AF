@@ -1,3 +1,4 @@
 "id";"name";"surname";"mail";"service";"school";"password";"role"
 1;"Michel";"Susetee";"admin@airfrance.fr";"Riviera";"Feraille";"admin";"Administrateur"
 2;"Lisa";"Durand";"student@ecole.fr";"none";"EFREI";"student";"Etudiant"
+3;"Hantala";"Eric";"eric.hantala@efrei.net";"Data Science";"Efrei";"123";"Administrateur"

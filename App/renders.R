@@ -17,8 +17,9 @@ gantt<-renderPlotly(printGantt(data_event[data_event$project==project.id(),]))
 
 #LINKS DATATABLE
 Lien<-read.csv2("files.csv",stringsAsFactors = FALSE)
-Lien[,1]<-sprintf(paste('<a href="',Lien[,"link"],'" target="_blank" class="btn btn-primary">Lien</a>'))
-table_archive <- DT::renderDataTable(Lien[Lien$project==project.id(),c("name","link")], rownames = FALSE)
+Lien[,"link"]<-sprintf(paste('<a href="',Lien[,"link"],'" target="_blank" class="btn btn-primary">Lien</a>',sep = ""))
+colnames(Lien)<-c("id","project","Nom de stockage","Lien")
+table_archive <- DT::renderDataTable(Lien[Lien$project==project.id(),c("Nom de stockage","Lien")], rownames = FALSE,escape=FALSE)
 
 Stages <- stage_rss()
 table_stage <- DT::renderDataTable(Stages[,-c(3,6)], escape = FALSE, rownames = FALSE)

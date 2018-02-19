@@ -22,11 +22,13 @@ observeEvent(eventExpr = input$add_Personne,handlerExpr =  {
                    mail=input$add_Email,
                    service=input$add_Service,
                    school=input$add_Ecole,
-                   password="123")
+                   password="123",
+                   role=input$add_role)
   
   if(!(""%in%line[1,])){
     
-    write.table(x = line,file = "person.csv",append = TRUE,sep = ";",col.names = FALSE,quote = FALSE,row.names = FALSE)
+    write.table(x = line,file = "person.csv",append = TRUE,sep = ";",col.names = FALSE,quote = TRUE,row.names = FALSE)
+    removeModal()
   }else{
     warning("Empty Fields")
   }
@@ -44,7 +46,8 @@ observeEvent(eventExpr = input$add_Event,handlerExpr =  {
   
   if(!(""%in%line[1,])){
     
-    write.table(x = line,file = "calendar.csv",append = TRUE,sep = ";",col.names = FALSE,quote = FALSE,row.names = FALSE)
+    write.table(x = line,file = "calendar.csv",append = TRUE,sep = ";",col.names = FALSE,quote = TRUE,row.names = FALSE)
+    removeModal()
   }else{
     warning("Empty Fields")
   }
@@ -61,7 +64,8 @@ observeEvent(eventExpr = input$add_Project,handlerExpr =  {
   
   if(!(""%in%line[1,])){
     
-    write.table(x = line,file = "projects.csv",append = TRUE,sep = ";",col.names = FALSE,quote = FALSE,row.names = FALSE)
+    write.table(x = line,file = "projects.csv",append = TRUE,sep = ";",col.names = FALSE,quote = TRUE,row.names = FALSE)
+    removeModal()
   }else{
     warning("Empty Fields")
   }
@@ -93,6 +97,7 @@ observeEvent(eventExpr = input$change_Personne,handlerExpr =  {
   
   
   
+  
   if(!(""%in%line[1,])){
     
     temp<-df[df$mail==line$mail,]
@@ -101,7 +106,8 @@ observeEvent(eventExpr = input$change_Personne,handlerExpr =  {
     temp$service<-line$service
     temp$school<-line$school
     df[which(df$mail==mail),]<-temp
-    write.csv2(x = df,file = "person.csv",row.names = FALSE,quote = FALSE)
+    write.csv2(x = df,file = "person.csv",row.names = FALSE,quote = TRUE)
+    removeModal()
   }else{
     warning("Empty Fields")
   }
@@ -124,7 +130,8 @@ observeEvent(eventExpr = input$change_Project,handlerExpr =  {
     temp$location<-line$location
     temp$participantsID<-line$participantsID
     df[which(df$title==line$title),]<-temp
-    write.csv2(x = df,file = "projects.csv",row.names = FALSE,quote = FALSE)
+    write.csv2(x = df,file = "projects.csv",row.names = FALSE,quote = TRUE)
+    removeModal()
   }else{
     warning("Empty Fields")
   }
@@ -150,8 +157,8 @@ observeEvent(eventExpr = input$change_Event,handlerExpr =  {
     temp$location<-line$location
     temp$participantsID<-line$participantsID
     df[which((df$name==line$name)&&(df$project==project.id())),]<-temp
-    write.csv2(x = df,file = "calendar.csv",row.names = FALSE,quote = FALSE)
-    
+    write.csv2(x = df,file = "calendar.csv",row.names = FALSE,quote = TRUE)
+    removeModal()
   }
 } )
 

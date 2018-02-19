@@ -87,7 +87,7 @@ bodylogged<-tabItems(
           h2("Send E-Mail"),
           mainPanel(
             #textInput(inputId = "mail_from",label = "From",placeholder = "email@adress.com",width = "100%"),
-            textInput(inputId = "mail_to",label = "To",placeholder = "email@adress.com",width = "100%"),
+            selectInput(inputId = "mail_to",label = "To",choices = NULL,width = "100%",multiple = TRUE),
             textInput(inputId = "mail_subject",label = "Objet",placeholder = "Object",width = "100%"),
             textAreaInput(inputId = "mail_text",label = "Message",placeholder = "...",rows = 15,width = "200%"),
             actionButton(inputId = "mail_send",label = "Send")

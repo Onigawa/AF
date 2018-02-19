@@ -101,6 +101,12 @@ server <- function(input, output, session) {
     )
     })
   observe({
+    updateSelectInput(session, "mail_to",
+                      choices = data_person[data_person$id %in% project_person.id()$person,"mail"]
+    )
+  })
+  
+  observe({
     if(connection$role=="Administrateur") updateTextInput(session,"change_Email",value = connection$session$mail)
     })
   
