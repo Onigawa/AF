@@ -3,7 +3,7 @@ data_person <- read.table(file = "person.csv", header = TRUE, stringsAsFactors =
 project_person<-read.table(file = "project_person.csv", header = TRUE, stringsAsFactors = FALSE, sep = ";")
 project_person.id<-reactive(project_person[project_person$project==project.id(),])
 table_person <- DT::renderDataTable(data_person[data_person$id %in% project_person.id()$person,], rownames = FALSE)
-#connection.email<-renderText(connection$session$mail)
+
 
 
 data_project <- read.table(file = "projects.csv", header = TRUE, stringsAsFactors = FALSE, sep = ";")
@@ -14,12 +14,11 @@ table_projects <-  DT::renderDataTable( data_project[data_project$title==input$c
 data_event<-read.csv2(file="./calendar.csv",stringsAsFactors = FALSE)
 
 gantt<-renderPlotly(printGantt(data_event[data_event$project==project.id(),]))
+
 #LINKS DATATABLE
-Projets <- c("PRJ2017", "RX-745")
-LienDrive <- c("https://drive.google.com/drive/folders/0B4PquDdceptmdlJCc3Z4ZUt5MEk")
-LienGit<- c("https://drive.google.com/drive/folders/0B4PquDdceptmdlJCc3Z4ZUt5MEk")
-Lien <- data.frame(Projets= Projets,LienDrive=LienDrive,LienGit=LienGit)
-table_archive <- DT::renderDataTable(Lien, rownames = FALSE)
+Lien<-read.csv2("files.csv",stringsAsFactors = FALSE)
+Lien[,1]<-sprintf(paste('<a href="',Lien[,"link"],'" target="_blank" class="btn btn-primary">Lien</a>'))
+table_archive <- DT::renderDataTable(Lien[Lien$project==project.id(),c("name","link")], rownames = FALSE)
 
 Stages <- stage_rss()
 table_stage <- DT::renderDataTable(Stages[,-c(3,6)], escape = FALSE, rownames = FALSE)
