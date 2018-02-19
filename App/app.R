@@ -49,6 +49,8 @@ server <- function(input, output, session) {
   output$table_person<-table_person
   output$gantt<-gantt
   output$changeprofile<-changeprofile
+  output$project_title<-project_title
+  output$project_description<-project_description
   
   
   

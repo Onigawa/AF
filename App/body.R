@@ -20,8 +20,9 @@ bodylogged<-tabItems(
           fluidRow(
             #Projets
             box(
-              title = "Projet", width = 6, solidHeader = TRUE, status = "danger",
-              DT:: dataTableOutput('table_projects')
+              title = textOutput("project_title"), width = 6, solidHeader = TRUE, status = "danger",
+             # DT:: dataTableOutput('table_projects')
+             textOutput("project_description")
               
             ),
             #Workflow

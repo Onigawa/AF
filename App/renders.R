@@ -11,6 +11,9 @@ data_project <- read.table(file = "projects.csv", header = TRUE, stringsAsFactor
 
 table_projects <-  DT::renderDataTable( data_project[data_project$title==input$current_project,], rownames = FALSE) #DT::renderDataTable(data_project, rownames = FALSE)
 
+project_title<-renderText(data_project[data_project$title==input$current_project,"title"])
+project_description<-renderText(data_project[data_project$title==input$current_project,"description"])
+
 data_event<-read.csv2(file="./calendar.csv",stringsAsFactors = FALSE)
 
 gantt<-renderPlotly(printGantt(data_event[data_event$project==project.id(),]))

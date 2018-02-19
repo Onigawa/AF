@@ -1,3 +1,3 @@
-id;title;type;school;location;participantsID
-2;Project PRJ;Informatique;EFREI;Administratif;1, 2
-3;YoloSwag;Informatique;EFREI;Administratif;1, 2
+"";"id";"title";"type";"school";"location";"participantsID";"description"
+"1";2;"Project PRJ";"Informatique";"EFREI";"Administratif";"1, 2";"Application de gestion de projets etudiants avec Air France et Efrei Paris"
+"2";3;"Test Projet";"Informatique";"EFREI";"Administratif";"1, 2";"Projet de test de l'application PRJ"
