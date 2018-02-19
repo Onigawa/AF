@@ -1,15 +1,15 @@
-login <- box(
-  title = "Authentification",
-  textInput("userName", "Email (admin@airfrance.fr OU student@ecole.fr)"),
-  passwordInput("passwd", "Password (admin ou student)"),
-  br(),
-  actionButton("Login", "Se connecter")
-)
+# login <- box(
+#   title = "Authentification",
+#   textInput("userName", "Email (admin@airfrance.fr OU student@ecole.fr)"),
+#   passwordInput("passwd", "Password (admin ou student)"),
+#   br(),
+#   actionButton("Login", "Se connecter")
+# )
 
-login2 <- box(
+login2 <- fluidPage(
   title = "Authentification",
-  textInput("userName2", "Email (admin@airfrance.fr OU student@ecole.fr)"),
-  passwordInput("passwd2", "Password (admin ou student)"),
+  textInput("userName2", "Email (admin@airfrance.fr OU student@ecole.fr)",value = "student@ecole.fr"),
+  passwordInput("passwd2", "Password (admin ou student)",value = "student"),
   br(),
   actionButton("Login2", "Se connecter")
 )
@@ -57,9 +57,9 @@ newproject <- box(solidHeader = TRUE, status = "danger",
                   actionButton("add_Project", "Sauvegarder")
 )
 
-changeprofile <- box(solidHeader = TRUE, status = "danger",
+changeprofilebase <- box(solidHeader = TRUE, status = "danger",
                      title = "Modifier une personne",
-                     conditionalPanel(condition = "connection.session.role=='Administrateur'", textInput("change_Email", "Email du profil a modifer")),
+                     textOutput("connection.email"),
                      textInput("change_Projet_Personne", "Identifiants des Projets"),
                      textInput("change_Nom", "Nom"),
                      textInput("change_Prenom", "Prenom"),
@@ -70,6 +70,21 @@ changeprofile <- box(solidHeader = TRUE, status = "danger",
                      br(),
                      actionButton("change_Personne", "Sauvegarder")
 )
+
+changeprofileadmin <- box(solidHeader = TRUE, status = "danger",
+                         title = "Modifier une personne",
+                         textInput("change_Email", "Email du profil a modifier",value = NULL),
+                         textInput("change_Projet_Personne", "Identifiants des Projets"),
+                         textInput("change_Nom", "Nom"),
+                         textInput("change_Prenom", "Prenom"),
+                         textInput("change_Service", "Service"),
+                         textInput("change_Ecole", "Ecole"),
+                         
+                         #passwordInput("passwd", "Password (admin ou student)"),
+                         br(),
+                         actionButton("change_Personne", "Sauvegarder")
+)
+
 
 changeproject <- box(solidHeader = TRUE, status = "danger",
                      title = "Modifier un Projet",
