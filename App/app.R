@@ -16,9 +16,10 @@ source('body.R', local = TRUE)
 ui <- dashboardPage(skin = "red",
                     
                     dashboardHeader(title = "P.R.J.",tags$li(class = "dropdown", 
-                                                             #actionButton("DEBUG", "DEBUG"),
+                                                             
                                                              tags$li(class = "dropdown", textOutput("logged_user"), style = "padding-top: 15px; padding-bottom: 15px; color: #fff;"),
-                                                             tags$li(class = "dropdown", actionLink("header_login", textOutput("logintext")))
+                                                             tags$li(class = "dropdown", actionLink("header_login", textOutput("logintext"))),
+                                                             tags$li(class = "dropdown", actionLink("DEBUG", "Debug"))
                                                              )),
                     dashboardSidebar(uiOutput("sidebarpanel")),
                     dashboardBody(
@@ -47,15 +48,14 @@ server <- function(input, output, session) {
   output$table_person<-table_person
   output$gantt<-gantt
   
+  
   observeEvent(input$DEBUG,
                {
-                 #DEBUG
-                 dummy<-0
-                 dummy<-1
+                 browser()
                })
 
   source('handlers.R', local = TRUE)
-  
+  data_project_id<-reactive(data_project[data_project$title==input$current_project,"id"])
 
 
   output$role <- reactive({
@@ -87,6 +87,11 @@ server <- function(input, output, session) {
     return("Login here")
   })
   
+  output$logged_user <- renderText({
+    if(USER$Logged) return(paste("Bienvenue, ",connection$session$name,".",sep=""))
+    #return("Login here")
+  })
+  
   observe({
     updateSelectInput(session, "current_project",
                       choices = data_project[data_project$id==connection$projects$project,"title"]
@@ -101,6 +106,7 @@ server <- function(input, output, session) {
     
   })
   
+  project.id<-reactive(data_project[data_project$title==input$current_project,"id"])
   }
 
 

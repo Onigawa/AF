@@ -1,6 +1,8 @@
 #LOADING CSV
-data_person <- read.table(file = "person.csv", header = TRUE, stringsAsFactors = FALSE, sep = ";")[,-1]
-table_person <- DT::renderDataTable(data_person, rownames = FALSE)
+data_person <- read.table(file = "person.csv", header = TRUE, stringsAsFactors = FALSE, sep = ";")
+project_person<-read.table(file = "project_person.csv", header = TRUE, stringsAsFactors = FALSE, sep = ";")
+project_person.id<-reactive(project_person[project_person$project==project.id(),])
+table_person <- DT::renderDataTable(data_person[data_person$id %in% project_person.id()$person,], rownames = FALSE)
 
 data_project <- read.table(file = "projects.csv", header = TRUE, stringsAsFactors = FALSE, sep = ";")[,-1]
 

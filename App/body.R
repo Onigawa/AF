@@ -22,6 +22,7 @@ bodylogged<-tabItems(
             box(
               title = "Projet", width = 6, solidHeader = TRUE, status = "danger",
               DT:: dataTableOutput('table_projects')
+              
             ),
             #Workflow
             box(title = "WorkFlow", width = 6, solidHeader = TRUE, status = "danger",
