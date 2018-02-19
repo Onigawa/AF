@@ -181,5 +181,17 @@ observeEvent(input$box_add_person, {
 
 #Envoi de mail
 observeEvent(input$mail_send, {
-  PRJmail(to = input$mail_to,msg = input$mail_text,subject = input$mail_subject)
+  if("" %in% c(input$mail_to,input$mail_text,input$mail_subject)){
+    
+  }else{
+    showModal(modalDialog(
+      "Votre Email est en cours d'envoi",
+      size="s",
+      footer=NULL,
+      easyClose = TRUE
+    ))
+    PRJmail(to = input$mail_to,msg = input$mail_text,subject = input$mail_subject)
+
+  }
+  
 })
