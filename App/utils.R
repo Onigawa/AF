@@ -12,7 +12,7 @@ printGantt<-function(calendar){
   # Each trace is essentially a thick line plot
   # x-axis ticks are dates and handled automatically
   
-  for(i in 1:(nrow(calendar) -1)){
+  for(i in 1:(nrow(calendar) )){
     calendar$duration<-calendar$end[i]-calendar$start[i]
     p <- suppressWarnings(add_trace(p,
                                     x = c(calendar$start[i], calendar$end[i] ),  # x0, x1

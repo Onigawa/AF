@@ -39,7 +39,8 @@ observeEvent(eventExpr = input$add_Event,handlerExpr =  {
                    end=input$add_Event_End,
                    name=input$add_Event_Nom,
                    location=input$add_Event_Location,
-                   participantsID=input$add_Event_Participants)
+                   participantsID=input$add_Event_Participants,
+                   project=project.id())
   
   if(!(""%in%line[1,])){
     
@@ -128,16 +129,17 @@ observeEvent(eventExpr = input$change_Event,handlerExpr =  {
   df<-read.csv2("calendar.csv",stringsAsFactors = FALSE)
   
   
-  if(!(""%in%line[1,])){
+  if((""%in%line[1,])){
+    warning("Empty Fields")
+  }else{
     temp<-df[df$name==line$name,]
     temp$start<-line$start
     temp$end<-line$end
     temp$location<-line$location
     temp$participantsID<-line$participantsID
-    df[which(df$name==line$name),]<-temp
+    df[which((df$name==line$name)&&(df$project==project.id())),]<-temp
     write.csv2(x = df,file = "calendar.csv",row.names = FALSE,quote = FALSE)
-  }else{
-    warning("Empty Fields")
+    
   }
 } )
 

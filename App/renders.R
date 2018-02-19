@@ -4,12 +4,14 @@ project_person<-read.table(file = "project_person.csv", header = TRUE, stringsAs
 project_person.id<-reactive(project_person[project_person$project==project.id(),])
 table_person <- DT::renderDataTable(data_person[data_person$id %in% project_person.id()$person,], rownames = FALSE)
 
-data_project <- read.table(file = "projects.csv", header = TRUE, stringsAsFactors = FALSE, sep = ";")[,-1]
+data_project <- read.table(file = "projects.csv", header = TRUE, stringsAsFactors = FALSE, sep = ";")
 
 
 table_projects <-  DT::renderDataTable( data_project[data_project$title==input$current_project,], rownames = FALSE) #DT::renderDataTable(data_project, rownames = FALSE)
 
-gantt<-renderPlotly(printGantt(read.csv2(file="./calendar.csv")))
+data_event<-read.csv2(file="./calendar.csv",stringsAsFactors = FALSE)
+
+gantt<-renderPlotly(printGantt(data_event[data_event$project==project.id(),]))
 #LINKS DATATABLE
 Projets <- c("PRJ2017", "RX-745")
 LienDrive <- c("https://drive.google.com/drive/folders/0B4PquDdceptmdlJCc3Z4ZUt5MEk")
