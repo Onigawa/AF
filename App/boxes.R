@@ -8,11 +8,48 @@
 
 login2 <- fluidPage(
   title = "Authentification",
-  textInput("userName2", "Email (admin@airfrance.fr OU student@ecole.fr)",value = "student@ecole.fr"),
-  passwordInput("passwd2", "Password (admin ou student)",value = "student"),
+  textInput("userName2", "Email (admin@airfrance.fr OU student@ecole.fr)",value = "admin@airfrance.fr"),
+  passwordInput("passwd2", "Password (admin ou student)",value = "admin"),
   br(),
   actionButton("Login2", "Se connecter")
 )
+
+
+preprofile <- box(
+  title = "Modifier un profil",
+  textInput("preprofile_email", "Email du compte a modifier"),
+  br(),
+  actionButton("preprofile_push", "Modifier")
+)
+
+preevent <- box(
+  title = "Modifier une tache",
+  textInput("preevent_name", "Nom de l'evenement a modifier"),
+  br(),
+  actionButton("preevent_push", "Modifier")
+)
+
+preproject <- box(
+  title = "Modifier un projet",
+  textInput("preproject_name", "Nom du projet a modifier"),
+  br(),
+  actionButton("preproject_push", "Modifier")
+)
+
+postprofile<-fluidPage(
+                 title = paste("Modifier le compte"),
+                 textOutput("postprofilename"),
+                 textInput("change_Nom_post", "Nom"),
+                 textInput("change_Prenom_post", "Prenom"),
+                 textInput("change_Service_post", "Service"),
+                 textInput("change_Ecole_post", "Ecole"),
+                 textInput("change_Role_post", "Role"),
+                 
+                 #passwordInput("passwd", "Password (admin ou student)"),
+                 br(),
+                 actionButton("change_Personne_post", "Sauvegarder")
+)
+
 
 
 newprofile <- box(solidHeader = TRUE, status = "danger",
@@ -86,9 +123,9 @@ changeprofileadmin <- box(solidHeader = TRUE, status = "danger",
 )
 
 
-changeproject <- box(solidHeader = TRUE, status = "danger",
+changeproject <- fluidPage(#solidHeader = TRUE, status = "danger",
                      title = "Modifier un Projet",
-                     textInput("change_Project_Title", "Titre du projet a modifier"),
+                     #textInput("change_Project_Title", "Titre du projet a modifier"),
                      textInput("change_Project_Type", "Type de Projet"),
                      textInput("change_Project_School", "Nom de l'Ecole"),
                      textInput("change_Project_Location", "Localisation"),
@@ -100,11 +137,11 @@ changeproject <- box(solidHeader = TRUE, status = "danger",
                      actionButton("change_Project", "Sauvegarder")
 )
 
-changeevent <- box(solidHeader = TRUE, status = "danger",
+changeevent <- fluidPage(#solidHeader = TRUE, status = "danger",
                    title = "Modifier une tache",footer = "Format de date: 2017-11-07 09:42:25",
                    textInput("change_Event_Start", "Debut de la tache"),
                    textInput("change_Event_End", "Fin de la tache"),
-                   textInput("change_Event_Nom", "Nom de la tache"),
+                   #textInput("change_Event_Nom", "Nom de la tache"),
                    textInput("change_Event_Location", "Localisation"),
                    textInput("change_Event_Participants", "Identifiants des participants"),
                    

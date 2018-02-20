@@ -68,9 +68,12 @@ bodylogged<-tabItems(
   tabItem(tabName = "ajout",
           h2("Ajout"),
           
-          fluidPage(       
+          fluidPage(      
+            preprofile,
+            preevent,
+            preproject,
             newproject,         
-            changeprofileadmin,
+           # changeprofileadmin,
             changeevent,
             changeproject
           )

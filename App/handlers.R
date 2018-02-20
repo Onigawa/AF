@@ -2,7 +2,9 @@
 #Login 
 observeEvent(input$Login2,{
   df<-read.csv2(file = "person.csv",stringsAsFactors = FALSE)
-  if((df[df$mail==input$userName2,]$password)==input$passwd2){
+  pass<-(df[df$mail==input$userName2,]$password)
+  if(length(pass)<1) pass<-"NULL"
+  if(pass==input$passwd2){
     USER$Logged<-TRUE
     connection$session<-df[df$mail==input$userName2,]
     connection$role<-df[df$mail==input$userName2,"role"]
@@ -116,7 +118,7 @@ observeEvent(eventExpr = input$change_Personne,handlerExpr =  {
 #Modif de projets
 observeEvent(eventExpr = input$change_Project,handlerExpr =  {
   line<-data.frame(id=max(read.csv2("projects.csv")$id)+1,
-                   title=input$change_Project_Title,
+                   title=input$preproject_name,
                    type=input$change_Project_Type,
                    school=input$change_Project_School,
                    location=input$change_Project_Location,
@@ -142,7 +144,7 @@ observeEvent(eventExpr = input$change_Event,handlerExpr =  {
   line<-data.frame(id=max(read.csv2("calendar.csv")$id)+1,
                    start=input$change_Event_Start,
                    end=input$change_Event_End,
-                   name=input$change_Event_Nom,
+                   name=input$preevent_name,
                    location=input$change_Event_Location,
                    participantsID=input$change_Event_Participants,stringsAsFactors = FALSE)
   df<-read.csv2("calendar.csv",stringsAsFactors = FALSE)
@@ -169,6 +171,58 @@ observeEvent(input$box_add_event, {
     easyClose = TRUE
   ))
 }) 
+
+#Modif person modal
+observeEvent(input$preprofile_push,
+             showModal(modalDialog(
+               postprofile,
+               easyClose = TRUE
+             ))
+             )
+
+observeEvent(input$preevent_push,
+             showModal(modalDialog(
+               changeevent,
+               easyClose = TRUE
+             ))
+)
+observeEvent(input$preproject_push,
+             showModal(modalDialog(
+               changeproject,
+               easyClose = TRUE
+             ))
+)
+
+observeEvent(eventExpr = input$change_Personne_post,handlerExpr =  {
+  
+  line<-data.frame(id=max(read.csv2("person.csv")$id)+1,
+                     name=input$change_Nom_post,
+                     surname=input$change_Prenom_post,
+                     mail=input$preprofile_email,
+                     service=input$change_Service_post,
+                     school=input$change_Ecole_post,
+                     password="123",
+                     role=input$change_Role_post,
+                     stringsAsFactors = FALSE)
+  
+  df<-read.csv2("person.csv",stringsAsFactors = FALSE)
+
+  
+  if(!(""%in%line[1,])){
+    
+    temp<-df[df$mail==line$mail,]
+    temp$name<-line$name
+    temp$surname<-line$surname
+    temp$service<-line$service
+    temp$school<-line$school
+    
+    df[which(df$mail==input$preprofile_email),]<-temp
+    write.csv2(x = df,file = "person.csv",row.names = FALSE,quote = TRUE)
+    removeModal()
+  }else{
+    warning("Empty Fields")
+  }
+} )
 
 #ajout de personne modal
 observeEvent(input$box_add_person, {
