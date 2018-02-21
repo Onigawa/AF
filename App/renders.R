@@ -3,7 +3,7 @@ data_person <- read.table(file = "person.csv", header = TRUE, stringsAsFactors =
 project_person<-read.table(file = "project_person.csv", header = TRUE, stringsAsFactors = FALSE, sep = ";")
 project_person.id<-reactive(project_person[project_person$project==project.id(),])
 table_person <- DT::renderDataTable(data_person[data_person$id %in% project_person.id()$person,], rownames = FALSE)
-
+current_project_title<-renderText(data_project[data_project$id==connection$projects$project,"title"])
 
 
 data_project <- read.table(file = "projects.csv", header = TRUE, stringsAsFactors = FALSE, sep = ";")

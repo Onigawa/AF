@@ -51,6 +51,7 @@ server <- function(input, output, session) {
   output$changeprofile<-changeprofile
   output$project_title<-project_title
   output$project_description<-project_description
+  output$current_project_title<-current_project_title
   
   observeEvent(input$tabs,{
                if(input$tabs=="profile")

@@ -30,8 +30,8 @@ preevent <- box(
 )
 
 preproject <- box(
-  title = "Modifier un projet",
-  textInput("preproject_name", "Nom du projet a modifier"),
+  title = paste("Modifier le projet courant"),
+  textOutput("current_project_title"),
   br(),
   actionButton("preproject_push", "Modifier")
 )
@@ -121,14 +121,12 @@ changeprofilebase <- box(
 
 changeproject <- fluidPage(#solidHeader = TRUE, status = "danger",
                      title = "Modifier un Projet",
-                     #textInput("change_Project_Title", "Titre du projet a modifier"),
+                     textInput("change_Project_Title", "Titre du projet"),
                      textInput("change_Project_Type", "Type de Projet"),
                      textInput("change_Project_School", "Nom de l'Ecole"),
                      textInput("change_Project_Location", "Localisation"),
-                     textInput("change_Project_Participants", "Identifiants des participants"),
+                     textAreaInput("change_Project_Description","Description"),
                      
-                     
-                     #passwordInput("passwd", "Password (admin ou student)"),
                      br(),
                      actionButton("change_Project", "Sauvegarder")
 )

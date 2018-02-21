@@ -1,4 +1,3 @@
-"";"id";"title";"type";"school";"location";"description"
-"1";2;"Project PRJ";"Informatique";"EFREI";"Administratif";"Application de gestion de projets etudiants avec Air France et Efrei Paris"
-"2";3;"Test Projet";"Informatique";"EFREI";"Administratif";"Projet de test de l'application PRJ"
-
+"id";"title";"type";"school";"location";"description"
+2;"Project PRJ";"Informatique";"EFREI";"Administratif";"Application de gestion de projets etudiants avec Air France et Efrei Paris"
+3;"Test Projet";"Informatique";"EFREI";"Administratif";"Projet de Test du projet PRJ"

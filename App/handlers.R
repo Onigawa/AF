@@ -121,20 +121,22 @@ observeEvent(eventExpr = input$change_Personne,handlerExpr =  {
 #Modif de projets
 observeEvent(eventExpr = input$change_Project,handlerExpr =  {
   line<-data.frame(id=max(read.csv2("projects.csv")$id)+1,
-                   title=input$preproject_name,
+                   title=input$change_Project_Title,
                    type=input$change_Project_Type,
                    school=input$change_Project_School,
                    location=input$change_Project_Location,
-                   participantsID=input$change_Project_Participants,stringsAsFactors = FALSE)
+                   description=input$change_Project_Description,
+                   stringsAsFactors = FALSE)
   df<-read.csv2("projects.csv",stringsAsFactors = FALSE)
   
   if(!(""%in%line[1,])){
-    temp<-df[df$title==line$title,]
+    temp<-df[df$id==project.id(),]
     temp$type<-line$type
+    temp$title<-line$title
     temp$school<-line$school
     temp$location<-line$location
-    temp$participantsID<-line$participantsID
-    df[which(df$title==line$title),]<-temp
+    temp$description<-line$description
+    df[which(df$id==project.id()),]<-temp
     write.csv2(x = df,file = "projects.csv",row.names = FALSE,quote = TRUE)
     removeModal()
   }else{
@@ -203,15 +205,23 @@ observeEvent(input$preevent_push,
                df<-df[which((df$name==input$preevent_name)&(df$project==project.id())),]
                updateTextInput(session,"change_Event_Start", value=df$start)
                updateTextInput(session,"change_Event_End", value=df$end)
-               updateTextInput(session,"change_Event_Location",value= df$localisation)
+               updateTextInput(session,"change_Event_Location",value= df$location)
                updateTextInput(session,"change_Event_Participants",value= df$participantsID)
                }
 )
 observeEvent(input$preproject_push,
-             showModal(modalDialog(
+             {showModal(modalDialog(
                changeproject,
                easyClose = TRUE
              ))
+               df<-read.csv2("projects.csv",stringsAsFactors = FALSE)
+               df<-df[which(df$id==project.id()),]
+               updateTextInput(session,"change_Project_Title", value=df$title)
+               updateTextInput(session,"change_Project_Type", value=df$type)
+               updateTextInput(session,"change_Project_School", value=df$school)
+               updateTextInput(session,"change_Project_Location",value= df$location)
+               updateTextAreaInput(session,"change_Project_Description",value=df$description)
+               }
 )
 
 observeEvent(eventExpr = input$change_Personne_post,handlerExpr =  {
