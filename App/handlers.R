@@ -65,7 +65,8 @@ observeEvent(eventExpr = input$add_Project,handlerExpr =  {
                    type=input$add_Project_Type,
                    school=input$add_Project_School,
                    location=input$add_Project_Location,
-                   participantsID=input$add_Project_Participants)
+                   description=input$add_Project_Description,
+                   )
   
   if(!(""%in%line[1,])){
     

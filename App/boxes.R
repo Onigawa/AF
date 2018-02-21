@@ -86,11 +86,10 @@ newproject <- box(
                   textInput("add_Project_Type", "Type de Projet"),
                   textInput("add_Project_School", "Nom de l'Ecole"),
                   textInput("add_Project_Location", "Localisation"),
-                  textInput("add_Project_Participants", "Identifiants des participants"),
+                  #textInput("add_Project_Participants", "Identifiants des participants"),
+                  textAreaInput("add_Project_Description","Description du projet"),
                   
-                  
-                  #passwordInput("passwd", "Password (admin ou student)"),
-                  br(),
+                                    br(),
                   actionButton("add_Project", "Sauvegarder")
 )
 
