@@ -51,8 +51,17 @@ server <- function(input, output, session) {
   output$changeprofile<-changeprofile
   output$project_title<-project_title
   output$project_description<-project_description
+  output$current_project_title<-current_project_title
   
-  
+  observeEvent(input$tabs,{
+               if(input$tabs=="profile")
+               {
+                 updateTextInput(session,inputId ="change_Nom" ,value = connection$session$name )
+                 updateTextInput(session,inputId ="change_Prenom" ,value = connection$session$surname )
+                 updateTextInput(session,inputId ="change_Service" ,value = connection$session$service )
+                 updateTextInput(session,inputId ="change_Ecole" ,value = connection$session$school )
+               }
+                 })
   
   observeEvent(input$DEBUG,
                {

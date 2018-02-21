@@ -3,7 +3,7 @@ data_person <- read.table(file = "person.csv", header = TRUE, stringsAsFactors =
 project_person<-read.table(file = "project_person.csv", header = TRUE, stringsAsFactors = FALSE, sep = ";")
 project_person.id<-reactive(project_person[project_person$project==project.id(),])
 table_person <- DT::renderDataTable(data_person[data_person$id %in% project_person.id()$person,], rownames = FALSE)
-
+current_project_title<-renderText(data_project[data_project$id==connection$projects$project,"title"])
 
 
 data_project <- read.table(file = "projects.csv", header = TRUE, stringsAsFactors = FALSE, sep = ";")
@@ -53,10 +53,10 @@ Projet_Resume <- renderText({"
   sidebarpanel <- renderUI(
   {
     if (USER$Logged == TRUE) {
-      
+        
       switch(connection$role,
              "Administrateur"={
-               sidebarMenu(
+               sidebarMenu(id = "tabs",
                  menuItem("Dashboard", tabName = "dashboard", icon = icon("dashboard")),
                  menuItem("Profil", tabName = "profile", icon = icon("user")),
                  menuItem("Archives", tabName = "archive", icon = icon("archive")),
@@ -83,7 +83,7 @@ Projet_Resume <- renderText({"
   changeprofile<-renderUI({
     if (USER$Logged == TRUE) {
     switch(connection$role,
-           "Administrateur"={changeprofileadmin},
+           #"Administrateur"={changeprofileadmin},
            changeprofilebase
            
     )
