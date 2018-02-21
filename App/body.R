@@ -72,10 +72,7 @@ bodylogged<-tabItems(
             preprofile,
             preevent,
             preproject,
-            newproject,         
-           # changeprofileadmin,
-            changeevent,
-            changeproject
+            newproject         
           )
           
   ),

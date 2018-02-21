@@ -53,10 +53,10 @@ Projet_Resume <- renderText({"
   sidebarpanel <- renderUI(
   {
     if (USER$Logged == TRUE) {
-      
+        
       switch(connection$role,
              "Administrateur"={
-               sidebarMenu(
+               sidebarMenu(id = "tabs",
                  menuItem("Dashboard", tabName = "dashboard", icon = icon("dashboard")),
                  menuItem("Profil", tabName = "profile", icon = icon("user")),
                  menuItem("Archives", tabName = "archive", icon = icon("archive")),
@@ -83,7 +83,7 @@ Projet_Resume <- renderText({"
   changeprofile<-renderUI({
     if (USER$Logged == TRUE) {
     switch(connection$role,
-           "Administrateur"={changeprofileadmin},
+           #"Administrateur"={changeprofileadmin},
            changeprofilebase
            
     )

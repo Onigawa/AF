@@ -10,7 +10,10 @@ observeEvent(input$Login2,{
     connection$role<-df[df$mail==input$userName2,"role"]
     df<-read.csv2("project_person.csv",stringsAsFactors = FALSE)
     connection$projects<-df[df$person==connection$session$id,]
+
     removeModal()
+    
+
   }
   
 })
@@ -107,7 +110,7 @@ observeEvent(eventExpr = input$change_Personne,handlerExpr =  {
     temp$surname<-line$surname
     temp$service<-line$service
     temp$school<-line$school
-    df[which(df$mail==mail),]<-temp
+    df[which(df$mail==connection$session$mail),]<-temp
     write.csv2(x = df,file = "person.csv",row.names = FALSE,quote = TRUE)
     removeModal()
   }else{
@@ -153,12 +156,13 @@ observeEvent(eventExpr = input$change_Event,handlerExpr =  {
   if((""%in%line[1,])){
     warning("Empty Fields")
   }else{
-    temp<-df[df$name==line$name,]
+    temp<-df[which((df$name==line$name)&(df$project==project.id())),]
     temp$start<-line$start
     temp$end<-line$end
     temp$location<-line$location
     temp$participantsID<-line$participantsID
-    df[which((df$name==line$name)&&(df$project==project.id())),]<-temp
+    df[which((df$name==line$name)&(df$project==project.id())),]<-temp
+    
     write.csv2(x = df,file = "calendar.csv",row.names = FALSE,quote = TRUE)
     removeModal()
   }
@@ -174,17 +178,34 @@ observeEvent(input$box_add_event, {
 
 #Modif person modal
 observeEvent(input$preprofile_push,
-             showModal(modalDialog(
+             {showModal(modalDialog(
                postprofile,
                easyClose = TRUE
              ))
+               
+            df<-read.csv2("person.csv",stringsAsFactors = FALSE)
+             df<-df[which(df$mail==input$preprofile_email),]
+             updateTextInput(session,"change_Nom_post",value = df$name)
+             updateTextInput(session,"change_Prenom_post",value = df$surname)
+             updateTextInput(session,"change_Service_post",value = df$service)
+             updateTextInput(session,"change_Ecole_post",value = df$school)
+             updateTextInput(session,"change_Role_post", value =df$role)
+             
+             }
              )
 
 observeEvent(input$preevent_push,
-             showModal(modalDialog(
+             {showModal(modalDialog(
                changeevent,
                easyClose = TRUE
              ))
+               df<-read.csv2("calendar.csv",stringsAsFactors = FALSE)
+               df<-df[which((df$name==input$preevent_name)&(df$project==project.id())),]
+               updateTextInput(session,"change_Event_Start", value=df$start)
+               updateTextInput(session,"change_Event_End", value=df$end)
+               updateTextInput(session,"change_Event_Location",value= df$localisation)
+               updateTextInput(session,"change_Event_Participants",value= df$participantsID)
+               }
 )
 observeEvent(input$preproject_push,
              showModal(modalDialog(
