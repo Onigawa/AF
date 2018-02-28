@@ -56,24 +56,24 @@ randString <- function(n = 5000) {
 }
 
 stage_rss<-function(link="http://recrutement.airfrance.com/handlers/offerRss.ashx?LCID=1036&Rss_Contract=3442"){
-  doc<-xmlParse(link)
-  
-  src<-xpathApply(xmlRoot(doc), "//item")
-  
-  for (i in 1:length(src)) {
-    if (i==1) {
-      foo<-xmlSApply(src[[i]], xmlValue)
-      DATA<-data.frame(t(foo), stringsAsFactors=FALSE)
-    }
-    else {
-      foo<-xmlSApply(src[[i]], xmlValue)
-      tmp<-data.frame(t(foo), stringsAsFactors=FALSE)
-      DATA<-rbind(DATA, tmp)
-    }
-    
-  }
-  DATA[,1]<-sprintf(paste('<a href="',DATA[,1],'" target="_blank" class="btn btn-primary">Lien</a>'))
-  colnames(DATA)<-c("Lien","Categorie","Cat1","Localisation","Intitule","Description","Date de Publication")
-  return(DATA)
+  # doc<-xmlParse(link)
+  # 
+  # src<-xpathApply(xmlRoot(doc), "//item")
+  # 
+  # for (i in 1:length(src)) {
+  #   if (i==1) {
+  #     foo<-xmlSApply(src[[i]], xmlValue)
+  #     DATA<-data.frame(t(foo), stringsAsFactors=FALSE)
+  #   }
+  #   else {
+  #     foo<-xmlSApply(src[[i]], xmlValue)
+  #     tmp<-data.frame(t(foo), stringsAsFactors=FALSE)
+  #     DATA<-rbind(DATA, tmp)
+  #   }
+  #   
+  # }
+  # DATA[,1]<-sprintf(paste('<a href="',DATA[,1],'" target="_blank" class="btn btn-primary">Lien</a>'))
+  # colnames(DATA)<-c("Lien","Categorie","Cat1","Localisation","Intitule","Description","Date de Publication")
+  # return(DATA)
 }
 

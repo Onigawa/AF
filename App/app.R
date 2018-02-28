@@ -60,7 +60,12 @@ server <- function(input, output, session) {
                  updateTextInput(session,inputId ="change_Prenom" ,value = connection$session$surname )
                  updateTextInput(session,inputId ="change_Service" ,value = connection$session$service )
                  updateTextInput(session,inputId ="change_Ecole" ,value = connection$session$school )
+                 
                }
+    if(input$tabs=="ajout"){
+      updateSelectInput(session,input="preproject",choices =read.csv2("projects.csv",stringsAsFactors = FALSE)$title ) 
+      updateSelectInput(session,input="preperson",choices =read.csv2("person.csv",stringsAsFactors = FALSE)$mail ) 
+    }
                  })
   
   observeEvent(input$DEBUG,

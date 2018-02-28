@@ -22,6 +22,14 @@ preprofile <- box(
   actionButton("preprofile_push", "Modifier")
 )
 
+preprojectperson <- box(
+  title = "Ajouter un projet a une personne",
+  selectInput("preproject", "Projet",choices = c(1,2,3)),
+  selectInput("preperson", "Personne",choices = c(1,2,3)),
+  br(),
+  actionButton("preprojectperson_push", "Modifier")
+)
+
 preevent <- box(
   title = "Modifier une tache",
   textInput("preevent_name", "Nom de l'evenement a modifier"),

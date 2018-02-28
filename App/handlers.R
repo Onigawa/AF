@@ -17,7 +17,19 @@ observeEvent(input$Login2,{
   }
   
 })
-
+observeEvent(eventExpr = input$preprojectperson_push,{
+  df<-read.csv2("projects.csv",stringsAsFactors = FALSE)
+  idProject<-df[df$title==input$preproject,"id"]
+  df<-read.csv2("person.csv",stringsAsFactors = FALSE)
+  idPerson<-df[df$mail==input$preperson,"id"]
+  df2<-data.frame(project=idProject,person=idPerson)
+  df<-read.csv2(file = "project_person.csv",stringsAsFactors = FALSE)
+  df<-rbind(df,df2)
+  df<-unique(df)
+  write.csv2(x=df,file = "project_person.csv",row.names = FALSE)
+  showModal(modalDialog("Project Added",easyClose = TRUE,footer = NULL))
+  
+})
 
 #Ajout de personnes
 observeEvent(eventExpr = input$add_Personne,handlerExpr =  {

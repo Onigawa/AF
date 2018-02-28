@@ -72,7 +72,8 @@ bodylogged<-tabItems(
             preprofile,
             preevent,
             preproject,
-            newproject         
+            newproject,
+            preprojectperson
           )
           
   ),
