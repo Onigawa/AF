@@ -6,6 +6,31 @@
 #   actionButton("Login", "Se connecter")
 # )
 
+headeroff<-dashboardHeader(title = "P.R.J.",tags$li(class = "dropdown", 
+                                                 
+                                                 tags$li(class = "dropdown", textOutput("logged_user"), style = "padding-top: 15px; padding-bottom: 15px; color: #fff;"),
+                                                 tags$li(class = "dropdown", actionLink("header_login", textOutput("logintext"))),
+                                                 tags$li(class = "dropdown", actionLink("header_signup", textOutput("signuptext"))),
+                                                 tags$li(class = "dropdown", actionLink("DEBUG", "Debug"))
+))
+
+headerlogged<-dashboardHeader(title = "P.R.J.",tags$li(class = "dropdown", 
+                                                 
+                                                 tags$li(class = "dropdown", textOutput("logged_user"), style = "padding-top: 15px; padding-bottom: 15px; color: #fff;"),
+                                                 tags$li(class = "dropdown", actionLink("header_login", textOutput("logintext"))),
+                                                # tags$li(class = "dropdown", actionLink("header_signup", textOutput("signuptext"))),
+                                                 tags$li(class = "dropdown", actionLink("DEBUG", "Debug"))
+))
+
+signupbox<-fluidPage(
+  title = "Sign Up",
+  textInput("signup_username", "Email (admin@airfrance.fr OU student@ecole.fr)",value = "admin@airfrance.fr"),
+  passwordInput("signup_psw", "Password",value = "123"),
+  br(),
+  actionButton("signup", "S'inscrire")
+)
+
+
 login2 <- fluidPage(
   title = "Authentification",
   textInput("userName2", "Email (admin@airfrance.fr OU student@ecole.fr)",value = "admin@airfrance.fr"),

@@ -79,6 +79,17 @@ Projet_Resume <- renderText({"
       
     }
   })
+  
+  headers<-renderUI({
+    if (USER$Logged == TRUE){
+      return(headerlogged)
+    }else{
+      return(headeroff)
+      }
+    
+    
+  })
+  
 
   changeprofile<-renderUI({
     if (USER$Logged == TRUE) {

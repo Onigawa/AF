@@ -15,12 +15,9 @@ source('body.R', local = TRUE)
 
 ui <- dashboardPage(skin = "red",
                     
-                    dashboardHeader(title = "P.R.J.",tags$li(class = "dropdown", 
-                                                             
-                                                             tags$li(class = "dropdown", textOutput("logged_user"), style = "padding-top: 15px; padding-bottom: 15px; color: #fff;"),
-                                                             tags$li(class = "dropdown", actionLink("header_login", textOutput("logintext"))),
-                                                             tags$li(class = "dropdown", actionLink("DEBUG", "Debug"))
-                                                             )),
+                   # uiOutput(outputId = "headers"),
+                   headeroff,
+                    
                     dashboardSidebar(uiOutput("sidebarpanel")),
                     dashboardBody(
                       tags$head(
@@ -52,6 +49,7 @@ server <- function(input, output, session) {
   output$project_title<-project_title
   output$project_description<-project_description
   output$current_project_title<-current_project_title
+  output$headers<-headers
   
   observeEvent(input$tabs,{
                if(input$tabs=="profile")
@@ -100,10 +98,28 @@ server <- function(input, output, session) {
 
   })
   
+  observeEvent(input$header_signup, {
+    if(USER$Logged){
+      session$reload()
+    }else{
+      showModal(modalDialog(
+        signupbox,
+        easyClose = TRUE,
+        footer = NULL
+      ))
+    }  
+    
+  })
+  
   # show "Login" or "Logout" depending on whether logged out or in
   output$logintext <- renderText({
     if(USER$Logged) return("Logout here")
     return("Login here")
+  })
+  
+  output$signuptext <- renderText({
+    if(USER$Logged) return(NULL)
+    return("Sign Up")
   })
   
   output$logged_user <- renderText({

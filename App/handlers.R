@@ -17,6 +17,28 @@ observeEvent(input$Login2,{
   }
   
 })
+observeEvent(input$signup,{
+  df<-data.frame(time=Sys.time(),mail=input$signup_username,psw=randString(1))
+  write.table(x = df,file = "wait.csv",row.names = FALSE,append = TRUE,sep = ";",col.names = FALSE)
+  removeModal()
+  showModal(modalDialog("Un mail de confirmation vous a ete envoye",
+                        easyClose = TRUE,footer = NULL))
+  
+  msg<-paste(sep = '\n',
+           "Bonjour,",
+           "Pour acceder à la plateforme P.R.J, vous pouvez à present vous connecter en utilisant les identifiants suivants",
+           "",
+           paste("Utilisateur :",df$mail),
+           paste("Mot de passe :",df$psw),
+           " "
+           "Bien cordialement,",
+           "L'equipe P.R.J.")
+  PRJmail(to = input$signup_username,subject = "Confirmation Inscription P.R.J.",
+          msg = msg )
+  
+
+})
+
 observeEvent(eventExpr = input$preprojectperson_push,{
   df<-read.csv2("projects.csv",stringsAsFactors = FALSE)
   idProject<-df[df$title==input$preproject,"id"]
