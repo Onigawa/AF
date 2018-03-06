@@ -99,6 +99,19 @@ newprofile <- box(solidHeader = TRUE, status = "danger",
                   actionButton("add_Personne", "Sauvegarder")
 )
 
+newprofilesign <- box(
+                  title = "Entrez vos informations",
+                  textInput("add_Nom", "Nom"),
+                  textInput("add_Prenom", "Prenom"),
+                  #textInput("add_Email", "Email"),
+                  #textInput("add_Service", "Service"),
+                  textInput("add_Ecole", "Ecole"),
+                  #selectInput("add_role","Niveau d'autorisation",choices = c("Administrateur","Etudiant")),
+                  passwordInput("passwdsign", "Nouveau Mot de Passe"),
+                  br(),
+                  actionButton("add_Personne_sign", "Sauvegarder")
+)
+
 newevent <- box(solidHeader = TRUE, status = "danger",
                 title = "Ajouter une tache",footer = "Format de date: 2017-11-07 09:42:25",
                 textInput("add_Event_Start", "Debut de la tache"),

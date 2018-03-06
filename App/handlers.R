@@ -1,17 +1,27 @@
 
 #Login 
 observeEvent(input$Login2,{
-  df<-read.csv2(file = "person.csv",stringsAsFactors = FALSE)
-  pass<-(df[df$mail==input$userName2,]$password)
-  if(length(pass)<1) pass<-"NULL"
-  if(pass==input$passwd2){
-    USER$Logged<-TRUE
-    connection$session<-df[df$mail==input$userName2,]
-    connection$role<-df[df$mail==input$userName2,"role"]
-    df<-read.csv2("project_person.csv",stringsAsFactors = FALSE)
-    connection$projects<-df[df$person==connection$session$id,]
-
-    removeModal()
+  df<-read.csv2(file = "wait.csv",stringsAsFactors = FALSE)
+  if(input$userName2 %in% df$mail){
+    if(df[df$mail==input$userName2,]$psw == input$passwd2){
+      #first connection
+      showModal(modalDialog(newprofilesign,footer = NULL))
+    }
+  }else{
+    df<-read.csv2(file = "person.csv",stringsAsFactors = FALSE)
+    pass<-(df[df$mail==input$userName2,]$password)
+    if(length(pass)<1) pass<-"NULL"
+    if(pass==input$passwd2){
+      USER$Logged<-TRUE
+      connection$session<-df[df$mail==input$userName2,]
+      connection$role<-df[df$mail==input$userName2,"role"]
+      df<-read.csv2("project_person.csv",stringsAsFactors = FALSE)
+      connection$projects<-df[df$person==connection$session$id,]
+      
+      removeModal()
+  }
+  
+ 
     
 
   }
@@ -30,7 +40,7 @@ observeEvent(input$signup,{
            "",
            paste("Utilisateur :",df$mail),
            paste("Mot de passe :",df$psw),
-           " "
+           " ",
            "Bien cordialement,",
            "L'equipe P.R.J.")
   PRJmail(to = input$signup_username,subject = "Confirmation Inscription P.R.J.",
@@ -64,10 +74,45 @@ observeEvent(eventExpr = input$add_Personne,handlerExpr =  {
                    password="123",
                    role=input$add_role)
   
+  
+  
+  if(!(""%in%line[1,])){
+
+    write.table(x = line,file = "person.csv",append = TRUE,sep = ";",col.names = FALSE,quote = TRUE,row.names = FALSE)
+    #removeModal()
+  }else{
+    warning("Empty Fields")
+  }
+} )
+
+
+observeEvent(eventExpr = input$add_Personne_sign,handlerExpr =  {
+  line<-data.frame(id=max(read.csv2("person.csv")$id)+1,
+                   name=input$add_Nom,
+                   surname=input$add_Prenom,
+                   mail=input$userName2,
+                   service="NA",
+                   school=input$add_Ecole,
+                   password=input$passwdsign,
+                   role="Etudiant")
+  
+  
   if(!(""%in%line[1,])){
     
     write.table(x = line,file = "person.csv",append = TRUE,sep = ";",col.names = FALSE,quote = TRUE,row.names = FALSE)
-    removeModal()
+    
+    df<-read.csv2(file = "person.csv",stringsAsFactors = FALSE)
+    pass<-(df[df$mail==input$userName2,]$password)
+
+      USER$Logged<-TRUE
+      connection$session<-df[df$mail==input$userName2,]
+      connection$role<-df[df$mail==input$userName2,"role"]
+      df<-read.csv2("project_person.csv",stringsAsFactors = FALSE)
+      connection$projects<-df[df$person==connection$session$id,]
+      df<-read.csv2("wait.csv")
+      df<-df[df$mail!=input$userName2,]
+      write.table(x = df,file = "wait.csv",sep = ";",row.names = FALSE,col.names = TRUE)
+      removeModal()
   }else{
     warning("Empty Fields")
   }
